@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # PhotoGallery
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.17.
@@ -57,3 +58,7 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+=======
+# Photo-Gallery
+Angular based Photo-Gallery with firebase authentication, Firestore for user-specific and drag and drop upload
+>>>>>>> 7bd6d0f14bc4df64fa9dac227b903f6d5afa43f3
