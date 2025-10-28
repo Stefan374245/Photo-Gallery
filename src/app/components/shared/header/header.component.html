@@ -1,0 +1,67 @@
+<mat-toolbar color="primary" class="header-toolbar">
+  <div class="toolbar-content">
+    <!-- Logo/Brand -->
+    <div class="brand" routerLink="/gallery">
+      <mat-icon class="brand-icon">photo_camera</mat-icon>
+      <span class="brand-text">PhotoGallery</span>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav-links" *ngIf="currentUser$ | async as user">
+      <a mat-button routerLink="/gallery" routerLinkActive="active">
+        <mat-icon>photo_library</mat-icon>
+        Gallery
+      </a>
+      <a mat-button routerLink="/upload" routerLinkActive="active">
+        <mat-icon>add_a_photo</mat-icon>
+        Upload
+      </a>
+    </nav>
+
+    <!-- User Menu -->
+    <div class="user-section">
+      <ng-container *ngIf="currentUser$ | async as user; else loginButtons">
+        <button mat-icon-button [matMenuTriggerFor]="userMenu" class="user-menu-trigger">
+          <img *ngIf="user.photoURL; else defaultAvatar" 
+               [src]="user.photoURL" 
+               [alt]="(user.displayName || 'User') + ' profile picture'"
+               [title]="(user.displayName || 'User') + ' profile picture'"
+               class="user-avatar"
+               (error)="onImageError($event)"
+               aria-label="User profile picture">
+          <ng-template #defaultAvatar>
+            <mat-icon>account_circle</mat-icon>
+          </ng-template>
+        </button>
+        
+        <mat-menu #userMenu="matMenu" class="user-menu">
+          <div class="user-info">
+            <p class="user-name">{{ user.displayName || 'User' }}</p>
+            <p class="user-email">{{ user.email }}</p>
+          </div>
+          <mat-divider></mat-divider>
+          <button mat-menu-item routerLink="/profile">
+            <mat-icon>person</mat-icon>
+            Profile
+          </button>
+          <button mat-menu-item routerLink="/settings">
+            <mat-icon>settings</mat-icon>
+            Settings
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>exit_to_app</mat-icon>
+            Logout
+          </button>
+        </mat-menu>
+      </ng-container>
+
+      <ng-template #loginButtons>
+        <div class="auth-buttons">
+          <a mat-button routerLink="/auth/login">Login</a>
+          <a mat-raised-button routerLink="/auth/register">Sign Up</a>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</mat-toolbar>

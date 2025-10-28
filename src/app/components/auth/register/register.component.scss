@@ -1,0 +1,138 @@
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+  border-radius: 16px;
+}
+
+mat-card-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+mat-card-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+mat-card-subtitle {
+  color: #666;
+  margin-top: 8px;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.divider {
+  margin: 20px 0;
+  position: relative;
+  text-align: center;
+  
+  &::before {
+    content: 'OR';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 0 15px;
+    color: #666;
+    font-size: 12px;
+  }
+}
+
+.google-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  
+  mat-icon {
+    color: #4285f4;
+  }
+}
+
+mat-card-actions {
+  text-align: center;
+  padding-top: 20px;
+  
+  p {
+    margin: 8px 0;
+    color: #666;
+    font-size: 14px;
+  }
+}
+
+.link {
+  color: #764ba2;
+  text-decoration: none;
+  font-weight: 500;
+  
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.auth-footer {
+  text-align: center;
+  margin-top: 20px;
+  
+  a {
+    color: #3f51b5;
+    text-decoration: none;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+// Form field styling
+mat-form-field {
+  .mat-mdc-form-field-error {
+    font-size: 12px;
+  }
+}
+
+// Button loading state
+button[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+// Password visibility toggle
+.mat-mdc-form-field-icon-suffix {
+  button {
+    color: #666;
+    
+    &:hover {
+      color: #333;
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 480px) {
+  .auth-container {
+    margin: 0;
+    border-radius: 8px;
+  }
+}

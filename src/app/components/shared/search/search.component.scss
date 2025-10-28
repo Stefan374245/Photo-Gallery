@@ -1,0 +1,18 @@
+:host {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-field {
+  flex: 1;
+  min-width: 200px;
+}
+
+button {
+  color: #666;
+  
+  &:hover {
+    color: #333;
+  }
+}

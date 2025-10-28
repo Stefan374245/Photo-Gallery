@@ -1,0 +1,110 @@
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+  border-radius: 16px;
+}
+
+mat-card-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+mat-card-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+mat-card-subtitle {
+  color: #666;
+  margin-top: 8px;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.auth-divider {
+  margin: 20px 0;
+  text-align: center;
+  
+  span {
+    background: white;
+    padding: 0 16px;
+    color: #666;
+  }
+}
+
+.google-btn {
+  margin-bottom: 20px;
+  
+  mat-icon {
+    margin-right: 8px;
+  }
+}
+
+mat-card-actions {
+  text-align: center;
+  padding-top: 20px;
+  
+  p {
+    margin: 8px 0;
+    color: #666;
+    font-size: 14px;
+  }
+}
+
+.auth-footer {
+  text-align: center;
+  margin-top: 20px;
+  
+  a {
+    color: #3f51b5;
+    text-decoration: none;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+// Form field styling
+mat-form-field {
+  .mat-mdc-form-field-error {
+    font-size: 12px;
+  }
+}
+
+// Button loading state
+button[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+// Responsive design
+@media (max-width: 480px) {
+  .auth-container {
+    padding: 16px;
+  }
+  
+  .auth-card {
+    padding: 16px;
+  }
+}

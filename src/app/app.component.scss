@@ -1,0 +1,16 @@
+.main-content {
+  margin-top: 64px; // Height of the header toolbar
+  min-height: calc(100vh - 64px);
+  width: 100%;
+}
+
+// Global styles for the app
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  background-color: #fafafa;
+}

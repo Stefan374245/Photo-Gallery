@@ -1,0 +1,53 @@
+<div class="gallery-container">
+  <div class="gallery-header">
+    <h1>Photo Gallery</h1>
+    <button mat-raised-button color="primary" (click)="onUploadClick()">
+      <mat-icon>add_a_photo</mat-icon>
+      Upload Photo
+    </button>
+  </div>
+
+  <div *ngIf="isLoading$ | async" class="loading-container">
+    <mat-spinner></mat-spinner>
+    <p>Loading photos...</p>
+  </div>
+
+  <div *ngIf="!(isLoading$ | async)" class="photos-grid">
+    <mat-grid-list
+      [cols]="4"
+      [rowHeight]="'1:1'"
+      [gutterSize]="'16px'"
+      class="photo-grid"
+    >
+      <mat-grid-tile *ngFor="let photo of photos" class="photo-tile">
+        <mat-card class="photo-card" (click)="onPhotoClick(photo)">
+          <div class="image-container">
+            <img
+              [src]="photo.imageUrl"
+              [alt]="photo.title || 'Uploaded photo'"
+              [title]="photo.title || 'Uploaded photo'"
+              [attr.aria-label]="getPhotoLabel(photo)"
+              class="photo-image"
+              loading="lazy"
+              (error)="onImageError($event)"
+            />
+          </div>
+          <mat-card-content class="photo-info">
+            <h3 class="photo-title">{{ photo.title }}</h3>
+            <p class="photo-date">{{ photo.uploadedAt | date : "short" }}</p>
+          </mat-card-content>
+        </mat-card>
+      </mat-grid-tile>
+    </mat-grid-list>
+
+    <div *ngIf="photos.length === 0" class="empty-state">
+      <mat-icon class="empty-icon">photo_library</mat-icon>
+      <h2>No photos yet</h2>
+      <p>Start by uploading your first photo!</p>
+      <button mat-raised-button color="primary" (click)="onUploadClick()">
+        <mat-icon>add</mat-icon>
+        Upload Photo
+      </button>
+    </div>
+  </div>
+</div>
