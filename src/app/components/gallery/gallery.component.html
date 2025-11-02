@@ -1,5 +1,6 @@
 <mat-toolbar color="primary">
-  <span>📷 Fotogalerie</span>
+  <img src="assets/icons/logo.png" alt="Logo" class="toolbar-logo">
+  <span>Fotogalerie</span>
   <span class="spacer"></span>
   <span *ngIf="userEmail" class="user-email">{{ userEmail }}</span>
   <button mat-icon-button (click)="logout()" title="Abmelden">

@@ -7,6 +7,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { PhotoService } from '../../../services/photo.service';
+import { LogoAnimationService } from '../../../services/logo-animation.service';
 
 @Component({
   selector: 'app-upload',
@@ -32,7 +33,10 @@ export class UploadComponent {
   selectedFile: File | null = null;
   description = '';
 
-  constructor(private photoService: PhotoService) {}
+  constructor(
+    private photoService: PhotoService,
+    private logoAnimationService: LogoAnimationService
+  ) {}
 
   onDragOver(event: DragEvent) {
     event.preventDefault();
@@ -111,7 +115,14 @@ export class UploadComponent {
         if (this.fileInput) {
           this.fileInput.nativeElement.value = '';
         }
-        this.uploadSuccess.emit();
+        
+        // Logo-Animation triggern statt Alert
+        this.logoAnimationService.triggerAnimation();
+        
+        // Kurz warten, dann uploadSuccess emittieren
+        setTimeout(() => {
+          this.uploadSuccess.emit();
+        }, 500);
       },
       error: (error) => {
         console.error('Upload-Fehler:', error);

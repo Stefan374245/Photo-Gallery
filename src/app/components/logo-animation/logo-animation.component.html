@@ -1,0 +1,11 @@
+<div class="logo-animation-container" *ngIf="isVisible">
+  <div class="logo-wrapper" [class.animating]="isAnimating">
+    <img 
+      src="assets/icons/logo.png" 
+      alt="Photo Gallery Logo" 
+      class="logo-img"
+      [class.stage-center]="isAnimating"
+      [class.stage-expand]="isAnimating"
+      [class.stage-small]="isAnimating">
+  </div>
+</div>
