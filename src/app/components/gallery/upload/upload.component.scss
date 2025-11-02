@@ -1,0 +1,81 @@
+.upload-card {
+  margin-bottom: 24px;
+}
+
+.drop-zone {
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 40px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: #fafafa;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    border-color: #1976d2;
+    background-color: #f0f7ff;
+  }
+
+  &.dragging {
+    border-color: #1976d2;
+    background-color: #e3f2fd;
+    transform: scale(1.02);
+  }
+}
+
+.drop-zone-content {
+  pointer-events: none;
+}
+
+.drop-text {
+  font-size: 24px;
+  margin: 0 0 8px 0;
+  color: #666;
+}
+
+.drop-subtext {
+  font-size: 14px;
+  color: #999;
+  margin: 0;
+}
+
+.selected-file {
+  pointer-events: none;
+  
+  p {
+    margin: 8px 0;
+  }
+  
+  .file-size {
+    color: #666;
+    font-size: 14px;
+  }
+}
+
+.description-section {
+  margin-top: 24px;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.upload-button {
+  width: 100%;
+}
+
+.upload-progress {
+  margin-top: 24px;
+  
+  .progress-text {
+    text-align: center;
+    margin-top: 8px;
+    color: #666;
+  }
+}
+

@@ -1,0 +1,70 @@
+<div class="gallery-container">
+  <div class="gallery-header">
+    <h2>Meine Galerie</h2>
+    <button mat-icon-button (click)="refresh()" title="Aktualisieren">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
+
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner></mat-spinner>
+    <p>Fotos werden geladen...</p>
+  </div>
+
+  <div *ngIf="!loading && photos.length === 0" class="empty-state">
+    <mat-icon class="empty-icon">{{ mode === 'favorites' ? 'favorite_border' : mode === 'trash' ? 'delete_outline' : 'photo_library' }}</mat-icon>
+    <p>{{ mode === 'favorites' ? 'Noch keine Favoriten' : mode === 'trash' ? 'Papierkorb ist leer' : 'Noch keine Fotos hochgeladen' }}</p>
+    <p class="empty-subtitle">{{ mode === 'favorites' ? 'Markieren Sie Fotos als Favoriten' : mode === 'trash' ? 'Gelöschte Fotos erscheinen hier' : 'Laden Sie Ihr erstes Foto hoch!' }}</p>
+  </div>
+
+  <div *ngIf="!loading && photos.length > 0" class="photo-grid">
+    <mat-card 
+      *ngFor="let photo of photos" 
+      class="photo-card"
+      (click)="onPhotoClick(photo)">
+      
+      <img [src]="photo.url" [alt]="photo.description || 'Foto'" class="photo-image">
+      
+      <mat-card-content class="photo-content">
+        <p class="photo-description" *ngIf="photo.description">
+          {{ photo.description }}
+        </p>
+      </mat-card-content>
+
+      <div class="photo-actions">
+        <button 
+          *ngIf="mode !== 'trash'"
+          mat-icon-button 
+          class="favorite-button"
+          (click)="onToggleFavorite(photo, $event)"
+          [title]="photo.isFavorite ? 'Von Favoriten entfernen' : 'Zu Favoriten hinzufügen'">
+          <mat-icon [class.favorite-active]="photo.isFavorite">{{ photo.isFavorite ? 'favorite' : 'favorite_border' }}</mat-icon>
+        </button>
+        <button 
+          *ngIf="mode === 'trash'"
+          mat-icon-button 
+          class="restore-button"
+          (click)="onRestore(photo, $event)"
+          title="Wiederherstellen">
+          <mat-icon>restore</mat-icon>
+        </button>
+        <button 
+          *ngIf="mode === 'trash'"
+          mat-icon-button 
+          class="delete-button"
+          (click)="onPermanentlyDelete(photo, $event)"
+          title="Endgültig löschen">
+          <mat-icon>delete_forever</mat-icon>
+        </button>
+        <button 
+          *ngIf="mode !== 'trash'"
+          mat-icon-button 
+          class="delete-button"
+          (click)="onMoveToTrash(photo, $event)"
+          title="In Papierkorb verschieben">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </mat-card>
+  </div>
+</div>

@@ -1,0 +1,64 @@
+<mat-card class="upload-card">
+  <mat-card-header>
+    <mat-card-title>Foto hochladen</mat-card-title>
+  </mat-card-header>
+  
+  <mat-card-content>
+    <div 
+      class="drop-zone"
+      [class.dragging]="isDragging"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave($event)"
+      (drop)="onDrop($event)"
+      (click)="fileInput.click()">
+      
+      <input 
+        #fileInput 
+        type="file" 
+        accept="image/*" 
+        style="display: none;"
+        (change)="onFileSelected($event)">
+      
+      <div *ngIf="!selectedFile" class="drop-zone-content">
+        <p class="drop-text">📷 Foto hier ablegen</p>
+        <p class="drop-subtext">oder klicken, um eine Datei auszuwählen</p>
+      </div>
+      
+      <div *ngIf="selectedFile" class="selected-file">
+        <p><strong>Ausgewählt:</strong> {{ selectedFile.name }}</p>
+        <p class="file-size">{{ (selectedFile.size / 1024 / 1024).toFixed(2) }} MB</p>
+        <button mat-button color="warn" (click)="removeSelectedFile(); $event.stopPropagation()">
+          Entfernen
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="selectedFile && !isUploading" class="description-section">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Beschreibung (optional)</mat-label>
+        <textarea 
+          matInput 
+          rows="3" 
+          [(ngModel)]="description"
+          placeholder="Fügen Sie eine Beschreibung für dieses Foto hinzu...">
+        </textarea>
+      </mat-form-field>
+      
+      <button 
+        mat-raised-button 
+        color="primary" 
+        class="upload-button"
+        (click)="upload()">
+        Hochladen
+      </button>
+    </div>
+
+    <div *ngIf="isUploading" class="upload-progress">
+      <mat-progress-bar 
+        mode="determinate" 
+        [value]="uploadProgress">
+      </mat-progress-bar>
+      <p class="progress-text">Wird hochgeladen... {{ uploadProgress | number:'1.0-0' }}%</p>
+    </div>
+  </mat-card-content>
+</mat-card>

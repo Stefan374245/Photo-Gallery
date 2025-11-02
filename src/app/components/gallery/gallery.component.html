@@ -1,0 +1,42 @@
+<mat-toolbar color="primary">
+  <span>📷 Fotogalerie</span>
+  <span class="spacer"></span>
+  <span *ngIf="userEmail" class="user-email">{{ userEmail }}</span>
+  <button mat-icon-button (click)="logout()" title="Abmelden">
+    <mat-icon>logout</mat-icon>
+  </button>
+</mat-toolbar>
+
+<div class="hero-section">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h1 class="hero-title">Willkommen in Ihrer Galerie</h1>
+    <p class="hero-subtitle">Bewahren Sie Ihre schönsten Momente</p>
+  </div>
+</div>
+
+<div class="gallery-page">
+  <app-upload (uploadSuccess)="onUploadSuccess()"></app-upload>
+  
+  <mat-tab-group [(selectedIndex)]="selectedTabIndex" (selectedIndexChange)="onTabChange($event)">
+    <mat-tab label="Alle Fotos">
+      <app-list 
+        [viewMode]="'normal'"
+        (photoClick)="onPhotoClick($event)"
+        #listComponent>
+      </app-list>
+    </mat-tab>
+    <mat-tab label="Favoriten">
+      <app-list 
+        [viewMode]="'favorites'"
+        (photoClick)="onPhotoClick($event)">
+      </app-list>
+    </mat-tab>
+    <mat-tab label="Papierkorb">
+      <app-list 
+        [viewMode]="'trash'"
+        (photoClick)="onPhotoClick($event)">
+      </app-list>
+    </mat-tab>
+  </mat-tab-group>
+</div>

@@ -1,0 +1,68 @@
+<div class="dialog-container">
+  <div class="dialog-header">
+    <h2 mat-dialog-title>Foto</h2>
+    <div class="header-actions">
+      <button 
+        mat-icon-button 
+        (click)="toggleFavorite()"
+        [title]="data.isFavorite ? 'Von Favoriten entfernen' : 'Zu Favoriten hinzufügen'"
+        [class.favorite-active]="data.isFavorite">
+        <mat-icon>{{ data.isFavorite ? 'favorite' : 'favorite_border' }}</mat-icon>
+      </button>
+      <button mat-icon-button (click)="close()" class="close-button">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <mat-dialog-content class="dialog-content">
+    <img [src]="data.url" [alt]="data.description || 'Foto'" class="dialog-image">
+    
+    <div class="description-section">
+      <div *ngIf="!isEditing" class="description-display">
+        <p *ngIf="data.description" class="description-text">{{ data.description }}</p>
+        <p *ngIf="!data.description" class="no-description">Keine Beschreibung</p>
+        <button mat-button color="primary" (click)="startEditing()">
+          <mat-icon>edit</mat-icon>
+          Beschreibung bearbeiten
+        </button>
+      </div>
+
+      <div *ngIf="isEditing" class="description-edit">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Beschreibung</mat-label>
+          <textarea 
+            matInput 
+            rows="4" 
+            [(ngModel)]="description"
+            placeholder="Beschreibung hinzufügen...">
+          </textarea>
+        </mat-form-field>
+        
+        <div class="edit-actions">
+          <button 
+            mat-button 
+            (click)="cancelEditing()"
+            [disabled]="saving">
+            Abbrechen
+          </button>
+          <button 
+            mat-raised-button 
+            color="primary" 
+            (click)="saveDescription()"
+            [disabled]="saving">
+            <span *ngIf="!saving">Speichern</span>
+            <span *ngIf="saving">Wird gespeichert...</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="photo-info">
+      <p class="info-item">
+        <mat-icon>description</mat-icon>
+        <span>Dateiname: {{ data.filename }}</span>
+      </p>
+    </div>
+  </mat-dialog-content>
+</div>
