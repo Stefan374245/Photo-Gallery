@@ -27,6 +27,7 @@ export class ListComponent implements OnInit {
   mode: 'normal' | 'favorites' | 'trash' = 'normal';
   @Input() viewMode: 'normal' | 'favorites' | 'trash' = 'normal';
   @Output() photoClick = new EventEmitter<Photo>();
+  @Output() photosChanged = new EventEmitter<void>();
 
   constructor(private photoService: PhotoService) {}
 
@@ -76,6 +77,7 @@ export class ListComponent implements OnInit {
     this.photoService.toggleFavorite(photo.id, newFavoriteStatus).subscribe({
       next: () => {
         this.loadPhotos();
+        this.photosChanged.emit();
       },
       error: (error) => {
         console.error('Fehler beim Ändern des Favoriten-Status:', error);
@@ -91,6 +93,7 @@ export class ListComponent implements OnInit {
       this.photoService.moveToTrash(photo.id).subscribe({
         next: () => {
           this.loadPhotos();
+          this.photosChanged.emit();
         },
         error: (error) => {
           console.error('Fehler beim Löschen:', error);
@@ -106,6 +109,7 @@ export class ListComponent implements OnInit {
     this.photoService.restorePhoto(photo.id).subscribe({
       next: () => {
         this.loadPhotos();
+        this.photosChanged.emit();
       },
       error: (error) => {
         console.error('Fehler beim Wiederherstellen:', error);
@@ -121,6 +125,7 @@ export class ListComponent implements OnInit {
       this.photoService.permanentlyDeletePhoto(photo.id).subscribe({
         next: () => {
           this.loadPhotos();
+          this.photosChanged.emit();
         },
         error: (error) => {
           console.error('Fehler beim endgültigen Löschen:', error);

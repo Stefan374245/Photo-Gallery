@@ -19,23 +19,35 @@
   <app-upload (uploadSuccess)="onUploadSuccess()"></app-upload>
   
   <mat-tab-group [(selectedIndex)]="selectedTabIndex" (selectedIndexChange)="onTabChange($event)">
-    <mat-tab label="Alle Fotos">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        Alle Fotos <span class="tab-count">({{ allPhotosCount }})</span>
+      </ng-template>
       <app-list 
         [viewMode]="'normal'"
         (photoClick)="onPhotoClick($event)"
+        (photosChanged)="loadPhotoCounts()"
         #listComponent>
       </app-list>
     </mat-tab>
-    <mat-tab label="Favoriten">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        Favoriten <span class="tab-count">({{ favoritesCount }})</span>
+      </ng-template>
       <app-list 
         [viewMode]="'favorites'"
-        (photoClick)="onPhotoClick($event)">
+        (photoClick)="onPhotoClick($event)"
+        (photosChanged)="loadPhotoCounts()">
       </app-list>
     </mat-tab>
-    <mat-tab label="Papierkorb">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        Papierkorb <span class="tab-count">({{ trashCount }})</span>
+      </ng-template>
       <app-list 
         [viewMode]="'trash'"
-        (photoClick)="onPhotoClick($event)">
+        (photoClick)="onPhotoClick($event)"
+        (photosChanged)="loadPhotoCounts()">
       </app-list>
     </mat-tab>
   </mat-tab-group>

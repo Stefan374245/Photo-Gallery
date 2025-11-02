@@ -31,6 +31,11 @@ export class GalleryComponent implements OnInit {
   @ViewChild('listComponent') listComponent!: ListComponent;
   userEmail: string | null = null;
   selectedTabIndex = 0;
+  
+  // Foto-Anzahlen
+  allPhotosCount = 0;
+  favoritesCount = 0;
+  trashCount = 0;
 
   constructor(
     private authService: AuthService,
@@ -45,21 +50,55 @@ export class GalleryComponent implements OnInit {
         this.router.navigate(['/login']);
       } else {
         this.userEmail = user.email;
+        this.loadPhotoCounts();
+      }
+    });
+  }
+
+  loadPhotoCounts() {
+    // Alle Fotos zählen
+    this.photoService.getPhotos().subscribe({
+      next: (photos) => {
+        this.allPhotosCount = photos.length;
+      }
+    });
+
+    // Favoriten zählen
+    this.photoService.getFavoritePhotos().subscribe({
+      next: (photos) => {
+        this.favoritesCount = photos.length;
+      }
+    });
+
+    // Papierkorb zählen
+    this.photoService.getDeletedPhotos().subscribe({
+      next: (photos) => {
+        this.trashCount = photos.length;
       }
     });
   }
 
   onPhotoClick(photo: Photo) {
+    // Alle Fotos von der aktuellen Liste holen
+    const allPhotos = this.listComponent?.photos || [];
+    const currentIndex = allPhotos.findIndex(p => p.id === photo.id);
+    
     const dialogRef = this.dialog.open(PhotoDialogComponent, {
       width: '90%',
       maxWidth: '800px',
-      data: photo
+      data: {
+        photo: photo,
+        allPhotos: allPhotos,
+        currentIndex: currentIndex >= 0 ? currentIndex : 0
+      }
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       // Liste aktualisieren, wenn etwas geändert wurde
       if (result?.updated && this.listComponent) {
         this.listComponent.refresh();
+        // Anzahlen aktualisieren
+        this.loadPhotoCounts();
       }
     });
   }
@@ -76,6 +115,8 @@ export class GalleryComponent implements OnInit {
     if (this.listComponent) {
       this.listComponent.refresh();
     }
+    // Anzahlen aktualisieren
+    this.loadPhotoCounts();
   }
 
   onTabChange(index: number) {

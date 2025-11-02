@@ -9,6 +9,7 @@
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>E-Mail</mat-label>
           <input matInput type="email" formControlName="email" required>
+          <img matPrefix src="assets/icons/mail.svg" alt="E-Mail Icon" class="input-icon">
           <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
             E-Mail ist erforderlich
           </mat-error>
@@ -19,7 +20,22 @@
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Passwort</mat-label>
-          <input matInput type="password" formControlName="password" required>
+          <input matInput 
+                 [type]="hidePassword ? 'password' : 'text'" 
+                 formControlName="password" 
+                 required>
+          <button mat-icon-button 
+                  matSuffix 
+                  type="button"
+                  (click)="togglePasswordVisibility()"
+                  [attr.aria-label]="'Passwort ' + (hidePassword ? 'anzeigen' : 'verbergen')"
+                  [title]="hidePassword ? 'Passwort anzeigen' : 'Passwort verbergen'"
+                  class="visibility-toggle">
+            <img [src]="hidePassword ? 'assets/icons/visibilityoff.svg' : 'assets/icons/visibilityon.svg'" 
+                 [alt]="hidePassword ? 'Passwort anzeigen' : 'Passwort verbergen'"
+                 [title]="hidePassword ? 'Passwort anzeigen' : 'Passwort verbergen'"
+                 class="visibility-icon">
+          </button>
           <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
             Passwort ist erforderlich
           </mat-error>

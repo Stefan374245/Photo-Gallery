@@ -27,21 +27,89 @@ export class PhotoDialogComponent {
   description: string;
   isEditing = false;
   saving = false;
+  
+  // Carousel properties
+  allPhotos: Photo[] = [];
+  currentIndex = 0;
+  isAnimating = false;
+  private animationDuration = 600; // ms
 
   constructor(
     public dialogRef: MatDialogRef<PhotoDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Photo,
+    @Inject(MAT_DIALOG_DATA) public data: { photo: Photo; allPhotos: Photo[]; currentIndex: number },
     private photoService: PhotoService
   ) {
-    this.description = data.description || '';
+    this.description = data.photo.description || '';
+    this.allPhotos = data.allPhotos || [data.photo];
+    this.currentIndex = data.currentIndex || 0;
+  }
+
+  get currentPhoto(): Photo {
+    return this.allPhotos[this.currentIndex] || this.data.photo;
+  }
+
+  get carouselItems(): number[] {
+    return Array.from({ length: this.allPhotos.length }, (_, i) => i);
+  }
+
+  // Carousel methods
+  getCarouselTransform(): string {
+    const angle = (360 / this.allPhotos.length) * this.currentIndex;
+    const radius = 400;
+    return `translateZ(-${radius}px) rotateY(-${angle}deg)`;
+  }
+
+  getItemTransform(index: number): string {
+    const totalItems = this.allPhotos.length;
+    const angle = (360 / totalItems) * index;
+    const radius = 400;
+    return `rotateY(${angle}deg) translateZ(${radius}px)`;
+  }
+
+  getPrevIndex(): number {
+    return (this.currentIndex - 1 + this.allPhotos.length) % this.allPhotos.length;
+  }
+
+  getNextIndex(): number {
+    return (this.currentIndex + 1) % this.allPhotos.length;
+  }
+
+  nextSlide(): void {
+    if (this.isAnimating) return;
+    this.isAnimating = true;
+    this.currentIndex = this.getNextIndex();
+    this.description = this.currentPhoto.description || '';
+    setTimeout(() => {
+      this.isAnimating = false;
+    }, this.animationDuration);
+  }
+
+  previousSlide(): void {
+    if (this.isAnimating) return;
+    this.isAnimating = true;
+    this.currentIndex = this.getPrevIndex();
+    this.description = this.currentPhoto.description || '';
+    setTimeout(() => {
+      this.isAnimating = false;
+    }, this.animationDuration);
+  }
+
+  goToSlide(index: number): void {
+    if (this.isAnimating || index === this.currentIndex) return;
+    this.isAnimating = true;
+    this.currentIndex = index;
+    this.description = this.currentPhoto.description || '';
+    setTimeout(() => {
+      this.isAnimating = false;
+    }, this.animationDuration);
   }
 
   toggleFavorite() {
-    const newFavoriteStatus = !this.data.isFavorite;
+    const newFavoriteStatus = !this.currentPhoto.isFavorite;
     
-    this.photoService.toggleFavorite(this.data.id, newFavoriteStatus).subscribe({
+    this.photoService.toggleFavorite(this.currentPhoto.id, newFavoriteStatus).subscribe({
       next: () => {
-        this.data.isFavorite = newFavoriteStatus;
+        this.currentPhoto.isFavorite = newFavoriteStatus;
         this.dialogRef.close({ updated: true });
       },
       error: (error) => {
@@ -60,7 +128,7 @@ export class PhotoDialogComponent {
   }
 
   cancelEditing(): void {
-    this.description = this.data.description || '';
+    this.description = this.currentPhoto.description || '';
     this.isEditing = false;
   }
 
@@ -68,9 +136,9 @@ export class PhotoDialogComponent {
     if (this.saving) return;
 
     this.saving = true;
-    this.photoService.updatePhotoDescription(this.data.id, this.description).subscribe({
+    this.photoService.updatePhotoDescription(this.currentPhoto.id, this.description).subscribe({
       next: () => {
-        this.data.description = this.description;
+        this.currentPhoto.description = this.description;
         this.isEditing = false;
         this.saving = false;
         // Dialog-Ref zurückgeben, damit die Liste aktualisiert werden kann

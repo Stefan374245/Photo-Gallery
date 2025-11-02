@@ -1,13 +1,13 @@
 <div class="dialog-container">
   <div class="dialog-header">
-    <h2 mat-dialog-title>Foto</h2>
+    <h2 mat-dialog-title>Foto {{ currentIndex + 1 }} / {{ allPhotos.length }}</h2>
     <div class="header-actions">
       <button 
         mat-icon-button 
         (click)="toggleFavorite()"
-        [title]="data.isFavorite ? 'Von Favoriten entfernen' : 'Zu Favoriten hinzufügen'"
-        [class.favorite-active]="data.isFavorite">
-        <mat-icon>{{ data.isFavorite ? 'favorite' : 'favorite_border' }}</mat-icon>
+        [title]="currentPhoto.isFavorite ? 'Von Favoriten entfernen' : 'Zu Favoriten hinzufügen'"
+        [class.favorite-active]="currentPhoto.isFavorite">
+        <mat-icon>{{ currentPhoto.isFavorite ? 'favorite' : 'favorite_border' }}</mat-icon>
       </button>
       <button mat-icon-button (click)="close()" class="close-button">
         <mat-icon>close</mat-icon>
@@ -16,12 +16,56 @@
   </div>
 
   <mat-dialog-content class="dialog-content">
-    <img [src]="data.url" [alt]="data.description || 'Foto'" class="dialog-image">
+    <!-- 3D Carousel -->
+    <div class="carousel-container">
+      <div class="carousel-3d" 
+           [class.animating]="isAnimating"
+           [style.transform]="getCarouselTransform()">
+        <div class="carousel-item" 
+             *ngFor="let photo of allPhotos; let i = index"
+             [class.active]="i === currentIndex"
+             [class.prev]="i === getPrevIndex()"
+             [class.next]="i === getNextIndex()"
+             [style.transform]="getItemTransform(i)">
+          <img [src]="photo.url" 
+               [alt]="photo.description || 'Foto'" 
+               [title]="photo.description || 'Foto'"
+               class="carousel-image">
+        </div>
+      </div>
+      
+      <!-- Navigation Buttons -->
+      <button mat-icon-button 
+              class="carousel-nav carousel-nav-prev" 
+              (click)="previousSlide()"
+              [disabled]="isAnimating">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      
+      <button mat-icon-button 
+              class="carousel-nav carousel-nav-next" 
+              (click)="nextSlide()"
+              [disabled]="isAnimating">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+      
+      <!-- Indicators -->
+      <div class="carousel-indicators">
+        <button *ngFor="let photo of allPhotos; let i = index"
+                class="indicator"
+                [class.active]="i === currentIndex"
+                (click)="goToSlide(i)"
+                [disabled]="isAnimating"
+                [attr.aria-label]="'Zu Bild ' + (i + 1) + ' gehen'"
+                [title]="'Zu Bild ' + (i + 1) + ' gehen'">
+        </button>
+      </div>
+    </div>
     
     <div class="description-section">
       <div *ngIf="!isEditing" class="description-display">
-        <p *ngIf="data.description" class="description-text">{{ data.description }}</p>
-        <p *ngIf="!data.description" class="no-description">Keine Beschreibung</p>
+        <p *ngIf="currentPhoto.description" class="description-text">{{ currentPhoto.description }}</p>
+        <p *ngIf="!currentPhoto.description" class="no-description">Keine Beschreibung</p>
         <button mat-button color="primary" (click)="startEditing()">
           <mat-icon>edit</mat-icon>
           Beschreibung bearbeiten
@@ -61,7 +105,7 @@
     <div class="photo-info">
       <p class="info-item">
         <mat-icon>description</mat-icon>
-        <span>Dateiname: {{ data.filename }}</span>
+        <span>Dateiname: {{ currentPhoto.filename }}</span>
       </p>
     </div>
   </mat-dialog-content>
